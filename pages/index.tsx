@@ -1,28 +1,33 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.scss'
 import { useQuery, gql } from '@apollo/client'
+import { useEffect } from 'react'
+import DisplayArea from '@/components/displayArea'
+
 
 const FACEBOOK_REPOS = gql`
   query getFacebookRepos {
-      user(login: "Meta") {
-        id
-        repositories(last: 10, orderBy: {field: CREATED_AT, direction: DESC}) {
-          nodes {
-            description
+    organization(login: "facebook") {
+      repositories(first: 12, orderBy: {field: UPDATED_AT, direction: DESC}) {
+        edges {
+          node {
             id
+            description
             name
             url
-            createdAt
-            updatedAt
           }
         }
       }
     }
+  }
 `
 
 export default function Home() {
   const { loading, error, data } = useQuery(FACEBOOK_REPOS)
-  console.log("data : ", data)
+
+  useEffect(() => {
+    console.log(data)
+  }, [])
 
   return (
     <>
@@ -34,6 +39,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <h1> facebook repositories </h1>
+        { error ? 'Error' : loading ? 'Loading...' : <DisplayArea apiResponse={data} /> }
       </main>
     </>
   )

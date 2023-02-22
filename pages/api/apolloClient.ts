@@ -9,7 +9,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: `Bearer ${process.env.TOKEN_GIT}` 
+      authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN_GIT}` 
     }
   }
 })
